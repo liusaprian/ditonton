@@ -1,3 +1,4 @@
+import 'package:ditonton/common/ssl_pinning.dart';
 import 'package:ditonton/data/datasources/db/database_helper.dart';
 import 'package:ditonton/data/datasources/movie_local_data_source.dart';
 import 'package:ditonton/data/datasources/movie_remote_data_source.dart';
@@ -29,9 +30,7 @@ import 'package:ditonton/presentation/provider/top_rated_tvs_notifier.dart';
 import 'package:ditonton/presentation/provider/tv_detail_notifier.dart';
 import 'package:ditonton/presentation/provider/tv_list_notifier.dart';
 import 'package:ditonton/presentation/provider/watchlist_movie_notifier.dart';
-import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
-
 import 'domain/usecases/get_popular_tvs.dart';
 import 'domain/usecases/get_top_rated_tvs.dart';
 
@@ -40,21 +39,21 @@ final locator = GetIt.instance;
 void init() {
   // provider
   locator.registerFactory(
-    () => MovieListNotifier(
+        () => MovieListNotifier(
       getNowPlayingMovies: locator(),
       getPopularMovies: locator(),
       getTopRatedMovies: locator(),
     ),
   );
   locator.registerFactory(
-    () => TVListNotifier(
+        () => TVListNotifier(
       getNowPlayingTVs: locator(),
       getPopularTVs: locator(),
       getTopRatedTVs: locator(),
     ),
   );
   locator.registerFactory(
-    () => MovieDetailNotifier(
+        () => MovieDetailNotifier(
       getMovieDetail: locator(),
       getMovieRecommendations: locator(),
       getWatchListStatus: locator(),
@@ -63,7 +62,7 @@ void init() {
     ),
   );
   locator.registerFactory(
-    () => TVDetailNotifier(
+        () => TVDetailNotifier(
       getTVDetail: locator(),
       getTVRecommendations: locator(),
       getWatchListStatus: locator(),
@@ -72,33 +71,33 @@ void init() {
     ),
   );
   locator.registerFactory(
-    () => MovieSearchNotifier(
-      searchMovies: locator(),
-      searchTVs: locator()
+        () => MovieSearchNotifier(
+        searchMovies: locator(),
+        searchTVs: locator()
     ),
   );
   locator.registerFactory(
-    () => PopularMoviesNotifier(
+        () => PopularMoviesNotifier(
       locator(),
     ),
   );
   locator.registerFactory(
-    () => TopRatedMoviesNotifier(
+        () => TopRatedMoviesNotifier(
       getTopRatedMovies: locator(),
     ),
   );
   locator.registerFactory(
-    () => PopularTVsNotifier(
+        () => PopularTVsNotifier(
       locator(),
     ),
   );
   locator.registerFactory(
-    () => TopRatedTVsNotifier(
+        () => TopRatedTVsNotifier(
       getTopRatedTVs: locator(),
     ),
   );
   locator.registerFactory(
-    () => WatchlistMovieNotifier(
+        () => WatchlistMovieNotifier(
       getWatchlistMovies: locator(),
     ),
   );
@@ -126,7 +125,7 @@ void init() {
 
   // repository
   locator.registerLazySingleton<MovieRepository>(
-    () => MovieRepositoryImpl(
+        () => MovieRepositoryImpl(
       remoteDataSource: locator(),
       localDataSource: locator(),
     ),
@@ -134,13 +133,13 @@ void init() {
 
   // data sources
   locator.registerLazySingleton<MovieRemoteDataSource>(
-      () => MovieRemoteDataSourceImpl(client: locator()));
+          () => MovieRemoteDataSourceImpl(client: locator()));
   locator.registerLazySingleton<MovieLocalDataSource>(
-      () => MovieLocalDataSourceImpl(databaseHelper: locator()));
+          () => MovieLocalDataSourceImpl(databaseHelper: locator()));
 
   // helper
   locator.registerLazySingleton<DatabaseHelper>(() => DatabaseHelper());
 
   // external
-  locator.registerLazySingleton(() => http.Client());
+  locator.registerLazySingleton(() => SSLPinning.client);
 }
