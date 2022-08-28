@@ -1,13 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton/domain/entities/tv.dart';
+import 'package:ditonton/presentation/bloc/tv/now_playing/now_playing_tvs_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv/popular/popular_tvs_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv/top_rated/top_rated_tvs_bloc.dart';
 import 'package:ditonton/presentation/pages/popular_tvs_page.dart';
 import 'package:ditonton/presentation/pages/top_rated_tvs_page.dart';
-import 'package:ditonton/presentation/provider/tv_list_notifier.dart';
 import 'package:ditonton/presentation/pages/tv_detail_page.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../common/constants.dart';
-import '../../common/state_enum.dart';
 
 class TvPage extends StatelessWidget {
   @override
@@ -23,14 +24,14 @@ class TvPage extends StatelessWidget {
                 'Now Playing',
                 style: kHeading6,
               ),
-              Consumer<TVListNotifier>(builder: (context, data, child) {
-                final state = data.nowPlayingState;
-                if (state == RequestState.Loading) {
+              BlocBuilder<NowPlayingTVsBloc, NowPlayingTVsState>(
+                builder: (context, state) {
+                if (state is NPLoading) {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
-                } else if (state == RequestState.Loaded) {
-                  return TVList(data.nowPlayingTVs);
+                } else if (state is NPHasData) {
+                  return TVList(state.result);
                 } else {
                   return Text('Failed');
                 }
@@ -40,14 +41,14 @@ class TvPage extends StatelessWidget {
                 onTap: () =>
                     Navigator.pushNamed(context, PopularTVsPage.ROUTE_NAME),
               ),
-              Consumer<TVListNotifier>(builder: (context, data, child) {
-                final state = data.popularTVState;
-                if (state == RequestState.Loading) {
+              BlocBuilder<PopularTVsBloc, PopularTVsState>(
+                builder: (context, state) {
+                if (state is PLoading) {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
-                } else if (state == RequestState.Loaded) {
-                  return TVList(data.popularTVs);
+                } else if (state is PHasData) {
+                  return TVList(state.result);
                 } else {
                   return Text('Failed');
                 }
@@ -57,14 +58,14 @@ class TvPage extends StatelessWidget {
                 onTap: () =>
                     Navigator.pushNamed(context, TopRatedTVsPage.ROUTE_NAME),
               ),
-              Consumer<TVListNotifier>(builder: (context, data, child) {
-                final state = data.topRatedTVsState;
-                if (state == RequestState.Loading) {
+              BlocBuilder<TopRatedTVsBloc, TopRatedTVsState>(
+                builder: (context, state) {
+                if (state is TRLoading) {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
-                } else if (state == RequestState.Loaded) {
-                  return TVList(data.topRatedTVs);
+                } else if (state is TRHasData) {
+                  return TVList(state.result);
                 } else {
                   return Text('Failed');
                 }

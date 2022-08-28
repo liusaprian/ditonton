@@ -1,12 +1,17 @@
+import 'package:ditonton/presentation/bloc/movie/now_playing/now_playing_movies_bloc.dart';
+import 'package:ditonton/presentation/bloc/movie/popular/popular_movies_bloc.dart';
+import 'package:ditonton/presentation/bloc/movie/top_rated/top_rated_movies_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv/now_playing/now_playing_tvs_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv/popular/popular_tvs_bloc.dart';
+import 'package:ditonton/presentation/bloc/tv/top_rated/top_rated_tvs_bloc.dart';
 import 'package:ditonton/presentation/pages/about_page.dart';
 import 'package:ditonton/presentation/pages/movie_page.dart';
-import 'package:ditonton/presentation/pages/search_page.dart';
+import 'package:ditonton/presentation/pages/search_movie_page.dart';
+import 'package:ditonton/presentation/pages/search_tv_page.dart';
 import 'package:ditonton/presentation/pages/tv_page.dart';
 import 'package:ditonton/presentation/pages/watchlist_movies_page.dart';
-import 'package:ditonton/presentation/provider/movie_list_notifier.dart';
-import 'package:ditonton/presentation/provider/tv_list_notifier.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -19,16 +24,15 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(
-        () => Provider.of<MovieListNotifier>(context, listen: false)
-          ..fetchNowPlayingMovies()
-          ..fetchPopularMovies()
-          ..fetchTopRatedMovies());
-    Future.microtask(
-        () => Provider.of<TVListNotifier>(context, listen: false)
-          ..fetchNowPlayingTVs()
-          ..fetchPopularTVs()
-          ..fetchTopRatedTVs());
+    Future.microtask(() {
+      BlocProvider.of<NowPlayingMoviesBloc>(context).add(NowPlayingMoviesEvent());
+      BlocProvider.of<PopularMoviesBloc>(context).add(PopularMoviesEvent());
+      BlocProvider.of<TopRatedMoviesBloc>(context).add(TopRatedMoviesEvent());
+
+      BlocProvider.of<NowPlayingTVsBloc>(context).add(NowPlayingTVsEvent());
+      BlocProvider.of<PopularTVsBloc>(context).add(PopularTVsEvent());
+      BlocProvider.of<TopRatedTVsBloc>(context).add(TopRatedTVsEvent());
+    });
   }
 
   final List<Widget> _listWidget = [
@@ -93,8 +97,7 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               Navigator.pushNamed(
                 context,
-                SearchPage.ROUTE_NAME,
-                arguments: _drawerIndex == 0 ? 'movie' : 'tv'
+                _drawerIndex == 0 ? SearchMoviePage.ROUTE_NAME : SearchTVPage.ROUTE_NAME,
               );
             },
             icon: Icon(Icons.search),
