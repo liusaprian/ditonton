@@ -1,0 +1,37 @@
+{
+  "adult": false,
+  "backdrop_path": "/path.jpg",
+  "episode_run_time": [
+    12
+  ],
+  "first_air_date": "2022-02-02",
+  "last_air_date": "2022-02-02",
+  "genres": [
+    {
+      "id": 1,
+      "name": "Action"
+    }
+  ],
+  "homepage": "https://google.com",
+  "id": 1,
+  "in_production": false,
+  "languages": [
+    "en"
+  ],
+  "next_episode_to_air": 1,
+  "number_of_episodes": 1,
+  "number_of_seasons": 1,
+  "origin_country": ["en"],
+  "original_language": "en",
+  "original_name": "Original Title",
+  "overview": "Overview",
+  "popularity": 1.0,
+  "poster_path": "/path.jpg",
+  "status": "Status",
+  "tagline": "Tagline",
+  "name": "Title",
+  "type": "tv",
+  "video": false,
+  "vote_average": 1.0,
+  "vote_count": 1
+}
